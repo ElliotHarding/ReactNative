@@ -1,36 +1,32 @@
 import React from 'react';
-import { View, Text, Button, Image, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
-import { useNavigation } from '@react-navigation/native'; // Import the navigation hook
-import { ArrowRight } from 'lucide-react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
-const { width } = Dimensions.get('window'); // Get screen width
+const { width } = Dimensions.get('window');
 
 function LoginPage() {
-  const navigation = useNavigation(); // Get the navigation object
+  const navigation = useNavigation();
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Home Screen</Text>
-      <Button
-        title="Go to Details"
-        onPress={() => navigation.navigate('Maps', { itemId: 86, otherParam: 'anything you want here' })}
-      />
-
-      {/* Image */}
       <Image
-        source={{ uri: 'https://placehold.co/400x300' }} // Replace with your image URL
+        source={{ uri: 'https://placehold.co/400x300' }}
         style={styles.image}
       />
 
-      {/* "Market mapper" Text */}
-      <Text style={[styles.marketMapperText, { fontSize: width * 0.04 }]}>Market mapper</Text> {/* Responsive font size */}
-
-      {/* Circular Button */}
+      <Text style={[styles.marketMapperText, { fontSize: width * 0.08 }]}>
+        Market Mapper
+      </Text>
       <TouchableOpacity
         style={styles.circularButton}
-        onPress={() => console.log('Button Pressed')} // Replace with your action
+        onPress={() =>
+          navigation.navigate('Maps', {
+            itemId: 86,
+            otherParam: 'anything you want here',
+          })
+        }
       >
-        <ArrowRight color="white" size={24} />
+        <Text style={styles.buttonText}>Go</Text>
       </TouchableOpacity>
     </View>
   );
@@ -51,23 +47,23 @@ const styles = StyleSheet.create({
     height: 300,
     borderRadius: 10,
     marginTop: 20,
-    resizeMode: 'cover'
+    resizeMode: 'cover',
   },
   marketMapperText: {
     position: 'absolute',
-    bottom: 20,
+    bottom: '40%',
     left: 20,
     color: 'black',
-    // fontSize: 16, // Removed fixed size
+    fontSize: width * 0.04,
   },
   circularButton: {
     position: 'absolute',
     bottom: 20,
     right: 20,
     backgroundColor: 'blue',
-    width: 50,
-    height: 50,
-    borderRadius: 25,
+    width: 70,
+    height: 70,
+    borderRadius: 35,
     alignItems: 'center',
     justifyContent: 'center',
     elevation: 5,
@@ -78,9 +74,8 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: 'white',
-    fontSize: 24,
+    fontSize: 36,
   },
 });
 
 export default LoginPage;
-
