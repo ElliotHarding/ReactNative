@@ -29,6 +29,7 @@ import { NavigationContainer, useNavigation, useRoute } from '@react-navigation/
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import LoginPage from './components/LoginPage';
 import UserPage from './components/UserPage';
+import ViewMap from './components/ViewMap';
 
 const Stack = createNativeStackNavigator();
 
@@ -54,11 +55,12 @@ function App(): React.JSX.Element {
 
   return (
 	<NavigationContainer>
-	      <Stack.Navigator initialRouteName="Home">
-		<Stack.Screen name="Home" component={LoginPage} options={{ title: 'Overview' }} />
-		<Stack.Screen name="Details" component={UserPage} />
+	      <Stack.Navigator>
+		<Stack.Screen name="Home" component={LoginPage} />
+		<Stack.Screen name="Maps" component={UserPage} />
+		<Stack.Screen name="ViewMap" component={ViewMap} />
 	      </Stack.Navigator>
-	</NavigationContainer>
+	    </NavigationContainer>
   );
 }
 	
