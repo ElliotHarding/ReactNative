@@ -1,23 +1,26 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom'; // Import Link
+import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity } from 'react-native';
 import axios from 'axios';
+import { useNavigation } from '@react-navigation/native'; // Import navigation hook
 
 function UserPage() {
-  	const [searchTerm, setSearchTerm] = useState('');
+    const [searchTerm, setSearchTerm] = useState('');
     const [filteredMapIds, setFilteredMapIds] = useState([]);
     const [mapIds, setMapIds] = useState([]);
+    const navigation = useNavigation(); // Get the navigation object
 
     useEffect(() => {
         const fetchMapIds = async () => {
             try {
-                const response = await axios.get('http://localhost:5000/api/map-ids');
+                const response = await axios.get('http://10.0.2.2:5000/api/map-ids');
                 const data = response.data;
                 setMapIds(data);
                 setFilteredMapIds(data);
             } catch (e) {
-                console.error('Error fetching map IDs:', e);
+                //console.error('Error fetching map IDs:', e);
+                console.error(e.message);
             } finally {
-            	console.error('Error fetching map IDs:');
+                console.log('Finished fetching map IDs.'); // Corrected: Removed erroneous console.error
             }
         };
 
@@ -31,57 +34,89 @@ function UserPage() {
         console.log('Search term: ', searchTerm, 'Filtered map IDs:', filtered);
     }, [searchTerm, mapIds]);
 
-    // Function to handle changes in the search term
-    const handleSearchTermChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setSearchTerm(event.target.value);
+    const handleSearchTermChange = (text) => {
+        setSearchTerm(text);
     };
 
-    function MapIdList({ mapIds, onRemoveMap }: { mapIds: number[]; }) {
-        const buttonStyle = {
-            padding: '10px 20px',
-            margin: '5px',
-            border: '1px solid #ccc',
-            borderRadius: '5px',
-            backgroundColor: '#f0f0f0',
-            cursor: 'pointer',
-            textAlign: 'center',
-            position: 'relative',
-            width: '60%',
-            textDecoration: 'none'
-        };
-
+    function MapIdList({ mapIds }) {
         return (
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', margin: '0 auto' }}>
+            <View style={styles.mapListContainer}>
                 {mapIds.map((mapId, index) => (
-                    <Link to={`/view/${mapId}`} style={buttonStyle} key={index}>
-                        <a>{mapId}</a>
-                    </Link>
+                    <TouchableOpacity
+                        key={index}
+                        style={styles.mapIdButton}
+                        onPress={() => navigation.navigate('ViewMap', { mapId })} // Navigate on press
+                    >
+                        <Text style={styles.mapIdText}>{mapId}</Text>
+                    </TouchableOpacity>
                 ))}
-            </div>
+            </View>
         );
     }
 
     return (
-        <div style={{ position: 'absolute', top: '35px', right: '20px', left: '20px', bottom: '20px'}}>
-            <br />
-            <h2>Our Maps</h2>
-            <br />
-                <div style={{width: '60%', left: '20%', position: 'absolute'}}>
-                    <div style={{ width: '40%' }}>
-                        <input
-                            style={{ width: '100%', padding: '8px' }}
-                            type="text"
-                            placeholder="Search Map ID..."
-                            value={searchTerm}
-                            onChange={handleSearchTermChange}
-                        />
-                    </div>
-                </div>
-                <br />
-                <br />
-                <MapIdList mapIds={filteredMapIds} />
-            </div>
+        <View style={styles.container}>
+            <Text style={styles.title}>Our Maps</Text>
+            <View style={styles.searchContainer}>
+                <TextInput
+                    style={styles.searchInput}
+                    type="text"
+                    placeholder="Search Map ID..."
+                    value={searchTerm}
+                    onChangeText={handleSearchTermChange} // Use onChangeText in React Native
+                />
+            </View>
+            <MapIdList mapIds={filteredMapIds} />
+            <Button title="Go to Home" onPress={() => navigation.navigate('Home')} />
+      	    <Button title="Go back" onPress={() => navigation.goBack()} />
+        </View>
     );
 }
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1, // Use flex to manage layout
+        paddingTop: 35, // Equivalent to top: 35px
+        paddingHorizontal: 20, // Equivalent to right/left: 20px
+        paddingBottom: 20, // Equivalent to bottom: 20px
+        alignItems: 'center', // Center items horizontally
+    },
+    title: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        marginBottom: 15,
+    },
+    searchContainer: {
+        width: '60%',
+        marginBottom: 15,
+    },
+    searchInput: {
+        width: '100%',
+        padding: 10,
+        borderColor: '#ccc',
+        borderWidth: 1,
+        borderRadius: 5,
+    },
+    mapListContainer: {
+        flex: 1, // Allow the list to grow and take available space
+        width: '100%',
+        alignItems: 'center',
+    },
+    mapIdButton: {
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        marginVertical: 5,
+        borderWidth: 1,
+        borderColor: '#ccc',
+        borderRadius: 5,
+        backgroundColor: '#f0f0f0',
+        width: '60%',
+        alignItems: 'center',
+    },
+    mapIdText: {
+        textAlign: 'center',
+        textDecorationLine: 'none', // Remove the default underline of Link
+    },
+});
 
 export default UserPage;
