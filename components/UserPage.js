@@ -5,19 +5,18 @@ import { useNavigation } from '@react-navigation/native'; // Import navigation h
 
 function UserPage() {
     const [searchTerm, setSearchTerm] = useState('');
-    const [filteredMapIds, setFilteredMapIds] = useState([]);
-    const [mapIds, setMapIds] = useState([]);
     const navigation = useNavigation(); // Get the navigation object
+    
+    const [filteredMaps, setFilteredMaps] = useState([]);
+    const [maps, setMaps] = useState([]);
 
     useEffect(() => {
         const fetchMapIds = async () => {
             try {
                 const response = await axios.get('http://10.0.2.2:5000/api/map-ids');
-                const data = response.data;
-                setMapIds(data);
-                setFilteredMapIds(data);
+                setMaps(response.data);
+                setFilteredMaps(response.data);
             } catch (e) {
-                //console.error('Error fetching map IDs:', e);
                 console.error(e.message);
             } finally {
                 console.log('Finished fetching map IDs.'); // Corrected: Removed erroneous console.error
@@ -27,28 +26,29 @@ function UserPage() {
         fetchMapIds();
     }, []);
 
+	
     useEffect(() => {
-        const lowercasedTerm = searchTerm.toLowerCase();
-        const filtered = mapIds.filter(id => String(id).includes(lowercasedTerm));
-        setFilteredMapIds(filtered);
-        console.log('Search term: ', searchTerm, 'Filtered map IDs:', filtered);
-    }, [searchTerm, mapIds]);
+        const term = searchTerm.toLowerCase();
+        setFilteredMaps(maps.filter(map => map.name.toLowerCase().includes(term)));
+    }, [searchTerm, maps]);
 
     const handleSearchTermChange = (text) => {
         setSearchTerm(text);
     };
+    
 
     function MapIdList({ mapIds }) {
         return (
             <View style={styles.mapListContainer}>
                 {mapIds.map((mapId, index) => (
-                    <TouchableOpacity
-                        key={index}
-                        style={styles.mapIdButton}
-                        onPress={() => navigation.navigate('ViewMap', { mapId })} // Navigate on press
-                    >
-                        <Text style={styles.mapIdText}>{mapId}</Text>
-                    </TouchableOpacity>
+                	
+                	<TouchableOpacity 
+                		style={styles.mapIdButton}
+                		onPress={() => navigation.navigate('ViewMap', { mapId: mapId.customMapId })}
+                		>
+                		<Text>{mapId.name}</Text>
+                	</TouchableOpacity>
+                   
                 ))}
             </View>
         );
@@ -65,7 +65,7 @@ function UserPage() {
                     onChangeText={handleSearchTermChange} // Use onChangeText in React Native
                 />
             </View>
-            <MapIdList mapIds={filteredMapIds} />
+            <MapIdList mapIds={filteredMaps} />
         </View>
     );
 }
