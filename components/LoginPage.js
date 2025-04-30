@@ -9,14 +9,8 @@ function LoginPage() {
 
   return (
     <View style={styles.container}>
-      <Image
-        source={{ uri: 'https://placehold.co/400x300' }}
-        style={styles.image}
-      />
+      <Image source={require('../assets/home.png')} style={styles.image} />
 
-      <Text style={[styles.marketMapperText, { fontSize: width * 0.08 }]}>
-        Market Mapper
-      </Text>
       <TouchableOpacity
         style={styles.circularButton}
         onPress={() =>
@@ -44,7 +38,7 @@ const styles = StyleSheet.create({
   },
   image: {
     width: '80%',
-    height: 300,
+    height: '90%',
     borderRadius: 10,
     marginTop: 20,
     resizeMode: 'cover',

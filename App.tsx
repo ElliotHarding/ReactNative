@@ -56,7 +56,7 @@ function App(): React.JSX.Element {
   return (
 	<NavigationContainer>
 	      <Stack.Navigator>
-		<Stack.Screen name="Home" component={LoginPage} />
+		<Stack.Screen name="Market Mapper" component={LoginPage} />
 		<Stack.Screen name="Maps" component={UserPage} />
 		<Stack.Screen name="ViewMap" component={ViewMap} />
 	      </Stack.Navigator>

@@ -56,7 +56,6 @@ function UserPage() {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Our Maps</Text>
             <View style={styles.searchContainer}>
                 <TextInput
                     style={styles.searchInput}
@@ -85,8 +84,8 @@ const styles = StyleSheet.create({
         marginBottom: 15,
     },
     searchContainer: {
-        width: '60%',
-        marginBottom: 15,
+        width: '80%',
+        marginBottom: 15,	
     },
     searchInput: {
         width: '100%',
@@ -108,7 +107,7 @@ const styles = StyleSheet.create({
         borderColor: '#ccc',
         borderRadius: 5,
         backgroundColor: '#f0f0f0',
-        width: '60%',
+        width: '80%',
         alignItems: 'center',
     },
     mapIdText: {
