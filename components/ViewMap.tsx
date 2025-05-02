@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { StyleSheet, View, Image, Text } from 'react-native';
+import { StyleSheet, View, Image, Text, Pressable, Button, TouchableOpacity} from 'react-native';
 import { useRoute } from '@react-navigation/native';
 import axios from 'axios';
 import { AutocompleteDropdown } from 'react-native-autocomplete-dropdown';
@@ -87,6 +87,7 @@ const ViewMap = () => {
 
     const handleSearchTextChange = (text: string) => {
         setSearchText(text);
+        alert('g');
  
         if (text.length > 0 && allProducts.length > 0) {
             const filtered = allProducts.filter(product =>
@@ -105,8 +106,9 @@ const ViewMap = () => {
     };
 
     const handleProductSelect = (item: any) => {
+    	alert('g');
         if (item) {
-            setSearchText(item.title);
+            setSearchText(item.name);
         }
     };
 
@@ -139,10 +141,17 @@ const ViewMap = () => {
             
             <View>
             
-            {filteredProducts && filteredProducts.length > 0 && filteredProducts.map ( (item, index) => (
-		      <Text> {filteredProducts.length} </Text>
-	        ))}
-	    )}
+            {filteredProducts.map((item) => (
+		  <View key={item.id} style={{ marginBottom: 10 }}>
+		    <TouchableOpacity
+		      onPress={() => handleProductSelect(item)}
+		      style={styles.resultButton}
+		    >
+		      <Text style={styles.resultButtonText}>{item.title}</Text>
+		    </TouchableOpacity>
+		    <Text style={{ fontSize: 12, color: 'gray' }}>{item.description}</Text>
+		  </View>
+		))}
             
             </View>
             
