@@ -34,6 +34,7 @@ const ViewMap = () => {
     const dropdownRef = useRef<AutocompleteDropdown>(null);
     const [loading, setLoading] = useState(true); // Add loading state
     const [error, setError] = useState<string | null>(null);
+    const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
 
     useEffect(() => {
@@ -104,9 +105,11 @@ const ViewMap = () => {
     };
 
     const handleProductSelect = (item: any) => {
-        if (item) {
-            setSearchText(item.name);
-        }
+	if (item) {
+	  setSearchText(item.name);
+	  setFilteredProducts([item]);
+	  setSelectedProduct(item); // set marker location
+	}
     };
 
     return (
@@ -135,7 +138,7 @@ const ViewMap = () => {
 		  }}
 		/>
             </View>
-            
+
             <View style={{ width: '90%', alignItems: 'center', marginTop: 10 }}>
             	{filteredProducts.map((item) => (
 		  <View key={item.id} style={{ marginBottom: 10, padding: 10, borderWidth: 1, width: '100%', borderColor: 'gray', borderRadius: 5, }}>
@@ -150,20 +153,27 @@ const ViewMap = () => {
 		))}
             </View>
             
-
-            {loading ? (
-                <Text>Loading map...</Text>
-            ) : error ? (
-                <Text style={{ color: 'red' }}>Error: {error}</Text>
-            ) : mapId ? (
-                <Image
-                    source={{ uri: imageUrl }}
-                    style={styles.image}
-                    resizeMode="contain"
-                />
-            ) : (
-                <Text>No Map ID provided.</Text>
-            )}
+            <View style={styles.imageWrapper}>
+		    <Image
+			source={{ uri: imageUrl }}
+			style={styles.image}
+			resizeMode="contain"
+		    />
+		    {selectedProduct && (
+			<View
+			    style={{
+				position: 'absolute',
+				left: `${selectedProduct.locationX}%`,
+				top: `${selectedProduct.locationY}%`,
+				width: 20,
+				height: 20,
+				backgroundColor: 'red',
+				borderRadius: 5,
+				transform: [{ translateX: -5 }, { translateY: -5 }],
+			    }}
+			/>
+		    )}
+		</View>
         </View>
     );
 };
@@ -194,9 +204,15 @@ const styles = StyleSheet.create({
         borderBottomColor: 'lightgray',
     },
     image: {
+        width: '100%',
+        height: '100%',
+        marginTop: 10,
+    },
+    imageWrapper: {
         width: '90%',
         height: '80%',
         marginTop: 10,
+        position: 'relative', // required for absolute positioning
     },
 });
 
