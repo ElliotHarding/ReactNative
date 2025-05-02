@@ -87,13 +87,11 @@ const ViewMap = () => {
 
     const handleSearchTextChange = (text: string) => {
         setSearchText(text);
-        alert('g');
  
         if (text.length > 0 && allProducts.length > 0) {
             const filtered = allProducts.filter(product =>
                 product.name.toLowerCase().includes(text.toLowerCase())
             );
-            alert(filtered);
             const mappedProducts = filtered.map(product => ({
                 id: product.name,
                 title: product.name,
@@ -106,7 +104,6 @@ const ViewMap = () => {
     };
 
     const handleProductSelect = (item: any) => {
-    	alert('g');
         if (item) {
             setSearchText(item.name);
         }
@@ -139,20 +136,18 @@ const ViewMap = () => {
 		/>
             </View>
             
-            <View>
-            
-            {filteredProducts.map((item) => (
-		  <View key={item.id} style={{ marginBottom: 10 }}>
+            <View style={{ width: '90%', alignItems: 'center', marginTop: 10 }}>
+            	{filteredProducts.map((item) => (
+		  <View key={item.id} style={{ marginBottom: 10, padding: 10, borderWidth: 1, width: '100%', borderColor: 'gray', borderRadius: 5, }}>
 		    <TouchableOpacity
 		      onPress={() => handleProductSelect(item)}
 		      style={styles.resultButton}
 		    >
-		      <Text style={styles.resultButtonText}>{item.title}</Text>
+		      <Text style={styles.resultButtonText}>{item.name}</Text>
 		    </TouchableOpacity>
 		    <Text style={{ fontSize: 12, color: 'gray' }}>{item.description}</Text>
 		  </View>
 		))}
-            
             </View>
             
 
