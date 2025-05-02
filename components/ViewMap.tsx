@@ -1,17 +1,23 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { StyleSheet, View, Image, TextInput, FlatList, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Image, TextInput, FlatList, Text, TouchableOpacity, Pressable } from 'react-native';
 import { useRoute } from '@react-navigation/native';
 import axios from 'axios';
 
 interface Product {
-  id: string;
   name: string;
-  // Add other relevant product properties
+  cost: string;
+  weight: string;
+  description: string;
+  count: number;
+  locationX: number;
+  locationY: number;
 }
 
 interface GridLocation {
+  locationX: number;
+  locationY: number;
+  color: string;
   products?: Product[];
-  // Add other relevant grid location properties
 }
 
 const ViewMap = () => {
@@ -81,6 +87,7 @@ const ViewMap = () => {
   };
 
   const handleProductSelect = (product: Product) => {
+    alert('2222');
     setSearchText(product.name);
     setIsDropdownVisible(false);
     // You can perform further actions here when a product is selected
@@ -88,9 +95,9 @@ const ViewMap = () => {
   };
 
   const renderItem = useCallback(({ item }: { item: Product }) => (
-    <TouchableOpacity onPress={() => handleProductSelect(item)} style={styles.dropdownItem}>
+    <Pressable onPress={() => handleProductSelect(item)} style={styles.dropdownItem}>
       <Text>{item.name}</Text>
-    </TouchableOpacity>
+    </Pressable>
   ), [handleProductSelect]);
 
   return (
@@ -107,7 +114,6 @@ const ViewMap = () => {
             <FlatList
               data={filteredProducts}
               renderItem={renderItem}
-              keyExtractor={(item) => item.id}
             />
           </View>
         )}
