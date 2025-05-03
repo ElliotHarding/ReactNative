@@ -213,7 +213,7 @@ const styles = StyleSheet.create({
       width: '80%',
       aspectRatio: 1,
       position: 'relative',
-      borderWidth: 1,
+      /*borderWidth: 1,*/
       overflow: 'hidden',
     },
 
