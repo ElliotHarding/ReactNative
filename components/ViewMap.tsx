@@ -209,17 +209,21 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         borderBottomColor: 'lightgray',
     },
-    image: {
-        width: '100%',
-        height: '100%',
-        bottom: '0px',
-    },
     imageWrapper: {
-        width: '80%',
-        height: '80%',
-        bottom: '10px',
-        position: 'fixed', // required for absolute positioning
+      width: '80%',
+      aspectRatio: 1,
+      position: 'relative',
+      borderWidth: 1,
+      overflow: 'hidden',
     },
+
+    image: {
+      flex: 1,
+      width: '100%',
+      height: '100%',
+      resizeMode: 'stretch',
+      alignSelf: 'flex-start',
+},
 });
 
 export default ViewMap;
