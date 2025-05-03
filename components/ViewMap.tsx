@@ -35,6 +35,7 @@ const ViewMap = () => {
     const [loading, setLoading] = useState(true); // Add loading state
     const [error, setError] = useState<string | null>(null);
     const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+    const [imageLayout, setImageLayout] = useState({ width: 0, height: 0 });
 
 
     useEffect(() => {
@@ -136,6 +137,7 @@ const ViewMap = () => {
 		    flexShrink: 0,
 		    zIndex: 100,
 		  }}
+		  showChevron={false}
 		/>
             </View>
 
@@ -155,24 +157,28 @@ const ViewMap = () => {
             
             <View style={styles.imageWrapper}>
 		    <Image
-			source={{ uri: imageUrl }}
-			style={styles.image}
-			resizeMode="contain"
-		    />
-		    {selectedProduct && (
-			<View
-			    style={{
-				position: 'absolute',
-				left: `${selectedProduct.locationX}%`,
-				top: `${selectedProduct.locationY}%`,
-				width: 20,
-				height: 20,
-				backgroundColor: 'red',
-				borderRadius: 5,
-				transform: [{ translateX: -5 }, { translateY: -5 }],
+			    source={{ uri: imageUrl }}
+			    style={styles.image}
+			    resizeMode="contain"
+			    onLayout={(event) => {
+				const { width, height } = event.nativeEvent.layout;
+				setImageLayout({ width, height });
 			    }}
 			/>
-		    )}
+            	    {selectedProduct && (
+			    <View
+				style={{
+				    position: 'absolute',
+				    left: (selectedProduct.locationX / 100) * imageLayout.width,
+				    top: (selectedProduct.locationY / 100) * imageLayout.height,
+				    width: 10,
+				    height: 10,
+				    backgroundColor: 'red',
+				    borderRadius: 5,
+				    transform: [{ translateX: -5 }, { translateY: -5 }],
+				}}
+			    />
+			)}
 		</View>
         </View>
     );
@@ -206,13 +212,13 @@ const styles = StyleSheet.create({
     image: {
         width: '100%',
         height: '100%',
-        marginTop: 10,
+        bottom: '0px',
     },
     imageWrapper: {
-        width: '90%',
+        width: '80%',
         height: '80%',
-        marginTop: 10,
-        position: 'relative', // required for absolute positioning
+        bottom: '10px',
+        position: 'fixed', // required for absolute positioning
     },
 });
 
